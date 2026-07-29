@@ -49,7 +49,7 @@ impl ValueWindowCycleCursor {
                 }
             }
         }
-        super::assignment_candidate::order_candidates(&mut triples, options, 0xA551_6EED_0000_0005);
+        super::assignment_candidate::order_candidates(&mut triples, options);
 
         let max_len = options
             .max_depth

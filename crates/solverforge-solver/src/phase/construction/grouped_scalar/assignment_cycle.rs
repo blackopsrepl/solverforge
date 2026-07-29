@@ -30,7 +30,7 @@ impl CycleWindowCursor {
         options: ScalarAssignmentMoveOptions,
     ) -> Self {
         let mut entities = assigned_entities_by_position(group, solution, state);
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_0010);
+        order_candidates(&mut entities, options);
         let max_len = options.max_rematch_size.min(entities.len()).max(2);
         Self {
             kind: CycleWindowKind::AugmentingRematch,
@@ -50,7 +50,7 @@ impl CycleWindowCursor {
         options: ScalarAssignmentMoveOptions,
     ) -> Self {
         let mut entities = assigned_entities_by_position(group, solution, state);
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_0011);
+        order_candidates(&mut entities, options);
         let max_len = options.max_rematch_size.min(entities.len()).max(2);
         Self {
             kind: CycleWindowKind::EjectionReinsert,

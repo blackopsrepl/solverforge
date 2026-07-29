@@ -1,13 +1,11 @@
 use crate::builder::ScalarAssignmentBinding;
-use crate::heuristic::selector::move_selector::MoveStreamContext;
-
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct ScalarAssignmentMoveOptions {
     pub(crate) value_candidate_limit: Option<usize>,
     pub(crate) max_moves: usize,
     pub(crate) max_depth: usize,
     pub(crate) max_rematch_size: usize,
-    pub(crate) selection_context: MoveStreamContext,
+    pub(crate) entity_offset: usize,
     pub(crate) required_scarcity_ordering: bool,
 }
 
@@ -18,7 +16,7 @@ impl ScalarAssignmentMoveOptions {
             max_moves: limits.group_candidate_limit.unwrap_or(usize::MAX),
             max_depth: limits.max_augmenting_depth.unwrap_or(3),
             max_rematch_size: limits.max_rematch_size.unwrap_or(4).max(2),
-            selection_context: MoveStreamContext::default(),
+            entity_offset: 0,
             required_scarcity_ordering: true,
         }
     }
@@ -27,14 +25,14 @@ impl ScalarAssignmentMoveOptions {
         limits: crate::builder::ScalarGroupLimits,
         value_candidate_limit: Option<usize>,
         max_moves_per_step: usize,
-        selection_context: MoveStreamContext,
+        entity_offset: usize,
     ) -> Self {
         Self {
             value_candidate_limit: value_candidate_limit.or(limits.value_candidate_limit),
             max_moves: max_moves_per_step,
             max_depth: limits.max_augmenting_depth.unwrap_or(3),
             max_rematch_size: limits.max_rematch_size.unwrap_or(4).max(2),
-            selection_context,
+            entity_offset,
             required_scarcity_ordering: true,
         }
     }
@@ -105,12 +103,9 @@ where
     entities
 }
 
-pub(super) fn order_candidates<T: Clone>(
-    candidates: &mut [T],
-    options: ScalarAssignmentMoveOptions,
-    salt: u64,
-) {
-    options
-        .selection_context
-        .apply_selection_order_without_replacement(candidates, salt);
+pub(super) fn order_candidates<T>(candidates: &mut [T], options: ScalarAssignmentMoveOptions) {
+    if !candidates.is_empty() {
+        let len = candidates.len();
+        candidates.rotate_left(options.entity_offset % len);
+    }
 }

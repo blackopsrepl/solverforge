@@ -61,7 +61,7 @@ impl AssignmentFamilyCursor {
         if should_stop() {
             return None;
         }
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_000B);
+        order_candidates(&mut entities, options);
         let value_degrees = if options.required_scarcity_ordering {
             required_value_degrees(
                 group,
@@ -89,7 +89,7 @@ impl AssignmentFamilyCursor {
         options: ScalarAssignmentMoveOptions,
         kind: AssignmentMoveKind,
     ) -> Self {
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_000C);
+        order_candidates(&mut entities, options);
         Self::EntityValues(EntityValueCursor {
             entities,
             entity_pos: 0,

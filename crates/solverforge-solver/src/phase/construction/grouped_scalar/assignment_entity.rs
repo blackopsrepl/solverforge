@@ -240,7 +240,7 @@ impl OptionalAdjustmentCursor {
             !state.is_required(entity_index) && state.current_value(entity_index).is_some()
         });
         state.sort_entities_by_current_value_pressure(group, solution, &mut targets);
-        order_candidates(&mut targets, options, 0xA551_6EED_0000_000D);
+        order_candidates(&mut targets, options);
         Self {
             kind: OptionalAdjustmentKind::Release,
             targets,
@@ -263,8 +263,8 @@ impl OptionalAdjustmentCursor {
             !state.is_required(entity_index) && state.current_value(entity_index).is_some()
         });
         state.sort_entities_by_current_value_pressure(group, solution, &mut sources);
-        order_candidates(&mut targets, options, 0xA551_6EED_0000_000E);
-        order_candidates(&mut sources, options, 0xA551_6EED_0000_000F);
+        order_candidates(&mut targets, options);
+        order_candidates(&mut sources, options);
         Self {
             kind: OptionalAdjustmentKind::Transfer,
             targets,

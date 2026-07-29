@@ -57,7 +57,7 @@ impl ValueLongWindowCursor {
                 pairs.push((index.values[left_pos], index.values[right_pos]));
             }
         }
-        super::assignment_candidate::order_candidates(&mut pairs, options, 0xA551_6EED_0000_0012);
+        super::assignment_candidate::order_candidates(&mut pairs, options);
 
         let base_len = options
             .max_rematch_size
@@ -147,7 +147,7 @@ impl ValueWindowCursor {
                 pairs.push((index.values[left_pos], index.values[right_pos]));
             }
         }
-        super::assignment_candidate::order_candidates(&mut pairs, options, 0xA551_6EED_0000_0013);
+        super::assignment_candidate::order_candidates(&mut pairs, options);
 
         let max_len = options
             .max_depth
@@ -241,7 +241,7 @@ impl ValueBlockReassignmentCursor {
                 }
             }
         }
-        super::assignment_candidate::order_candidates(&mut pairs, options, 0xA551_6EED_0000_0014);
+        super::assignment_candidate::order_candidates(&mut pairs, options);
 
         let max_len = options
             .max_depth

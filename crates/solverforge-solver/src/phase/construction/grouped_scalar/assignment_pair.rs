@@ -54,7 +54,7 @@ impl PairWindowCursor {
                 ));
             }
             assigned.sort_unstable();
-            order_candidates(&mut assigned, options, 0xA551_6EED_0000_0006);
+            order_candidates(&mut assigned, options);
         }
         Self::from_assigned(PairWindowKind::SequenceWindow, assigned, options)
     }
@@ -66,7 +66,7 @@ impl PairWindowCursor {
         options: ScalarAssignmentMoveOptions,
     ) -> Self {
         let mut entities = assigned_entities_by_position(group, solution, state);
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_0007);
+        order_candidates(&mut entities, options);
         Self::from_entities(PairWindowKind::Swap, entities, options)
     }
 
@@ -88,7 +88,7 @@ impl PairWindowCursor {
         }
         let mut sequence_keys = by_sequence.keys().copied().collect::<Vec<_>>();
         sequence_keys.sort_unstable();
-        order_candidates(&mut sequence_keys, options, 0xA551_6EED_0000_0008);
+        order_candidates(&mut sequence_keys, options);
         let mut groups = Vec::with_capacity(sequence_keys.len());
         for sequence_key in sequence_keys {
             let Some(mut entities) = by_sequence.remove(&sequence_key) else {
@@ -101,11 +101,7 @@ impl PairWindowCursor {
                     *entity_index,
                 )
             });
-            order_candidates(
-                &mut entities,
-                options,
-                0xA551_6EED_0000_0009 ^ sequence_key.unwrap_or(usize::MAX) as u64,
-            );
+            order_candidates(&mut entities, options);
             groups.push(entities);
         }
         Self::from_groups(PairWindowKind::Rematch, groups, options)
@@ -118,7 +114,7 @@ impl PairWindowCursor {
         options: ScalarAssignmentMoveOptions,
     ) -> Self {
         let mut entities = assigned_entities_by_position(group, solution, state);
-        order_candidates(&mut entities, options, 0xA551_6EED_0000_000A);
+        order_candidates(&mut entities, options);
         Self::from_entities(PairWindowKind::PairedReassignment, entities, options)
     }
 

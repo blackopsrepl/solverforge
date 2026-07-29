@@ -42,11 +42,11 @@ where
 
     let mut values = assigned_values.into_iter().collect::<Vec<_>>();
     values.sort_unstable();
-    order_candidates(&mut values, options, 0xA551_6EED_0000_0001);
+    order_candidates(&mut values, options);
 
     let mut sequence_keys = sequence_keys.into_iter().collect::<Vec<_>>();
     sequence_keys.sort_unstable();
-    order_candidates(&mut sequence_keys, options, 0xA551_6EED_0000_0002);
+    order_candidates(&mut sequence_keys, options);
 
     AssignedValueSequenceIndex {
         values,

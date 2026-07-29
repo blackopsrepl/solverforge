@@ -33,7 +33,7 @@ where
         options.value_candidate_limit,
         should_stop,
     )?;
-    order_candidates(&mut entities, options, 0xA551_6EED_0000_0004);
+    order_candidates(&mut entities, options);
     if should_stop() {
         return None;
     }

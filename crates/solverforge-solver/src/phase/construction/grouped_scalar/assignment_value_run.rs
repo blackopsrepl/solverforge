@@ -54,7 +54,7 @@ impl ValueRunGapSwapCursor {
                 }
             }
         }
-        super::assignment_candidate::order_candidates(&mut pairs, options, 0xA551_6EED_0000_0003);
+        super::assignment_candidate::order_candidates(&mut pairs, options);
 
         Self {
             pairs,

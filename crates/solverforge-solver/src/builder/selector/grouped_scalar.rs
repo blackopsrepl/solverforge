@@ -121,11 +121,20 @@ where
 
         match &group.kind {
             crate::builder::ScalarGroupBindingKind::Assignment(assignment) => {
+                let selection_salt =
+                    0xC0A1_E5CE_AAA0_0002 ^ group.group_name.len() as u64;
+                let entity_offset = if context.is_canonical() {
+                    0
+                } else {
+                    context
+                        .offset_seed(selection_salt)
+                        .wrapping_add(context.step_index() as usize)
+                };
                 let options = crate::phase::construction::grouped_scalar::ScalarAssignmentMoveOptions::for_selector(
                     group.limits,
                     limits.value_candidate_limit,
                     max_moves_per_step,
-                    context,
+                    entity_offset,
                 );
                 self.assignment_cursor = Some(
                     crate::phase::construction::grouped_scalar::ScalarAssignmentMoveCursor::new(
