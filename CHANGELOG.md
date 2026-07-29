@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.19.3](///compare/v0.19.2...v0.19.3) (2026-07-29)
+
+
+### Bug Fixes
+
+* **solver:** restore shared assignment rotation a4efa44
+
 ## [0.19.2](///compare/v0.19.1...v0.19.2) (2026-07-19)
 
 
