@@ -282,8 +282,9 @@ fn assignment_step<S, V, DM, IDM>(
     scalar_bindings: &[crate::descriptor::ResolvedVariableBinding<S>],
     required_only: bool,
 ) -> ResolvedDefaultConstructionStep<S, V, DM, IDM> {
+    let construction_heuristic_type = default_assignment_heuristic(required_only);
     let config = ConstructionHeuristicConfig {
-        construction_heuristic_type: ConstructionHeuristicType::CheapestInsertion,
+        construction_heuristic_type,
         construction_obligation: ConstructionObligation::AssignWhenCandidateExists,
         group_name: Some(binding.group.group_name.to_string()),
         ..ConstructionHeuristicConfig::default()
@@ -303,6 +304,14 @@ fn assignment_step<S, V, DM, IDM>(
         required_only,
         target: None,
         list_policies: None,
+    }
+}
+
+fn default_assignment_heuristic(required_only: bool) -> ConstructionHeuristicType {
+    if required_only {
+        ConstructionHeuristicType::FirstFit
+    } else {
+        ConstructionHeuristicType::CheapestInsertion
     }
 }
 
@@ -343,5 +352,22 @@ fn list_policies<S, V, DM, IDM>(
         ownership: slot.ownership_policy().trace_label(),
         construction_order: slot.construction_order_policy().trace_label(),
         precedence: slot.precedence_policy().trace_label(),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn required_assignment_defaults_commit_the_dense_batch_first() {
+        assert_eq!(
+            default_assignment_heuristic(true),
+            ConstructionHeuristicType::FirstFit
+        );
+        assert_eq!(
+            default_assignment_heuristic(false),
+            ConstructionHeuristicType::CheapestInsertion
+        );
     }
 }

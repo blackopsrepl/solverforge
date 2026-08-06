@@ -306,10 +306,10 @@ implicitly.
 
 When full `phases` are omitted, construction runs model-aware defaults before
 that local search: list variables use the matching specialized list
-construction, assignment-backed scalar groups run named grouped
-`CheapestInsertion` passes for required and optional slots, and remaining
-non-assignment-owned scalar variables use descriptor-backed single-slot
-construction.
+construction, assignment-backed scalar groups commit the hard-first required
+allocation through named grouped `FirstFit`, then run grouped
+`CheapestInsertion` for optional slots, and remaining non-assignment-owned
+scalar variables use descriptor-backed single-slot construction.
 Explicit scalar construction targets that name an assignment-owned variable
 must use the owning `group_name`.
 

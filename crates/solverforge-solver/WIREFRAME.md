@@ -1104,7 +1104,8 @@ Runtime routing is capability-driven:
 - named grouped scalar construction uses explicit `ScalarGroup` declarations bound to runtime scalar slots and applies all candidate edits atomically
 - assignment-backed `ScalarGroup` declarations run hard-first required
   assignment allocation before optional slots; omitted-phase defaults use
-  grouped `CheapestInsertion` for both assignment passes
+  grouped `FirstFit` to commit the dense required allocation before comparing
+  alternatives, then grouped `CheapestInsertion` for optional assignments
 - explicit scalar construction targets that name assignment-owned scalar
   variables must use the owning `group_name`; ungrouped construction for those
   targets is rejected before phase execution
