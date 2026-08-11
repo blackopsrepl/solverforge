@@ -176,6 +176,51 @@ fn assignment_binding_with_candidate_values(
     }
 }
 
+static DIRECT_BATCH_CANDIDATE_READS: std::sync::atomic::AtomicUsize =
+    std::sync::atomic::AtomicUsize::new(0);
+
+fn tracked_direct_batch_candidates(plan: &AssignmentPlan, entity: usize, _: usize) -> &[usize] {
+    DIRECT_BATCH_CANDIDATE_READS.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+    &plan.candidates[entity]
+}
+
+#[test]
+fn required_batch_defers_augmenting_rematches() {
+    DIRECT_BATCH_CANDIDATE_READS.store(0, std::sync::atomic::Ordering::SeqCst);
+    let descriptor = descriptor();
+    let limits = ScalarGroupLimits {
+        max_augmenting_depth: Some(4),
+        max_rematch_size: Some(8),
+        ..ScalarGroupLimits::new()
+    };
+    let assignment = assignment_binding_with_candidate_values(
+        &descriptor,
+        limits,
+        tracked_direct_batch_candidates,
+    );
+    let solution = AssignmentPlan {
+        score: None,
+        assignments: vec![None, None, None],
+        candidates: vec![vec![0, 2], vec![1, 2], vec![0, 1]],
+    };
+    let mut cursor = ScalarAssignmentMoveCursor::required_construction(
+        assignment,
+        solution,
+        ScalarAssignmentMoveOptions::for_construction(limits),
+    );
+
+    let direct_batch = cursor
+        .next_move_with_control(&mut || false)
+        .expect("direct required assignments must form a batch");
+
+    assert_eq!(direct_batch.edits().len(), 2);
+    assert_eq!(
+        DIRECT_BATCH_CANDIDATE_READS.load(std::sync::atomic::Ordering::SeqCst),
+        21,
+        "the direct batch must not traverse augmenting rematch candidates"
+    );
+}
+
 #[test]
 fn required_construction_can_rematch_rows_assigned_by_its_batch_move() {
     let descriptor = descriptor();

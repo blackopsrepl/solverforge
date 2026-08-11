@@ -1134,9 +1134,11 @@ search, VND, and cartesian composition.
 
 Assignment-backed scalar construction generates compound scalar moves from a
 named scalar group. Required entities are handled before optional entities. A
-required assignment pass builds one hard-first allocation candidate for dense
-multi-slot coverage, while single-slot required construction still exposes
-bounded candidates to the grouped selector so `cheapest_insertion` and
+required assignment pass builds one hard-first allocation candidate from
+independent direct assignments for dense multi-slot coverage. Augmenting
+rematches are deferred to the following required cursor, where their
+multi-entity edits can be retained. Single-slot required construction still
+exposes bounded candidates to the grouped selector so `cheapest_insertion` and
 weakest/strongest variants preserve their scoring and value-order semantics.
 Required assignments may displace optional occupants, move required blockers,
 and use assignment-rule legality through the shared assignment state. With

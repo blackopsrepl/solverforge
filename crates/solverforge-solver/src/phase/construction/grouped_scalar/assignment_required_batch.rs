@@ -73,7 +73,10 @@ where
                 group,
                 solution,
                 state,
-                AssignmentRequest::root(entity_index, value, options.max_depth),
+                // The batch below can retain only independent single-entity edits.
+                // Defer augmenting rematches to the following required cursor,
+                // where their multi-entity edits can actually be applied.
+                AssignmentRequest::root(entity_index, value, 0),
                 options,
                 AssignmentMoveIntent::required(),
                 should_stop,

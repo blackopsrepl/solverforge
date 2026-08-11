@@ -310,6 +310,9 @@ construction, assignment-backed scalar groups commit the hard-first required
 allocation through named grouped `FirstFit`, then run grouped
 `CheapestInsertion` for optional slots, and remaining non-assignment-owned
 scalar variables use descriptor-backed single-slot construction.
+The dense required batch collects independent assignments directly; bounded
+augmenting rematches remain available to the following required cursor instead
+of being explored inside a batch that cannot retain multi-entity edits.
 Explicit scalar construction targets that name an assignment-owned variable
 must use the owning `group_name`.
 
